@@ -24,7 +24,6 @@ def Números ():
     for I in range(5):
         Letra=string.ascii_uppercase[Fileiras[I]]
         Posições.append(str(Colunas[I])+Letra)
-
     return Posições
 
 #Bombas
@@ -33,7 +32,7 @@ print(Bombas)
 
 #Posição de jogadores:
 def PosiçãoDoJogador (Questão1,Questão2):
-      Posição_do_Jogador=str(Questão1+Questão2)
+      Posição_do_Jogador=str(Questão1)+Questão2
       if Posição_do_Jogador in Bombas:
             print()
             print('Casa com bomba. Você perdeu!')
@@ -44,21 +43,41 @@ def PosiçãoDoJogador (Questão1,Questão2):
             print('Casa sem bomba. Continue!')
             print()
             return False
+          
+
+def Marcação(Questão1, Questão2, Fileiras):
+    Posição_do_Jogador = str(Questão1) + Questão2
+
+    if Posição_do_Jogador not in Bombas:
+        Linha = string.ascii_uppercase.index(Questão2)
+        Coluna = Questão1 - 1
+        Fileiras[Linha][Coluna] = "✓"
+
+    return Fileiras
+           
 
 #Organização de tabuleiros:
-def Tabuleiro (Resposta):
+def Tabuleiro(Resposta):
       print()
       if Resposta==1:
+            Fileiras = [[" |" for Elemento in range(7)] for Elemento in range(7)]
             Contador=0
             while Contador<44:
-                  print ('     1  2  3  4  5  6  7')
-                  Fileiras=f' A   |  |  |  |  |  |  | \n B   |  |  |  |  |  |  | \n C   |  |  |  |  |  |  | \n D   |  |  |  |  |  |  | \n E   |  |  |  |  |  |  | \n F   |  |  |  |  |  |  | \n G   |  |  |  |  |  |  | '
-                  print(Fileiras)
-                  Questão1=input('Insira a coluna: ')
-                  Questão2=input('Insira a fileira: ')
+                  print ('   1  2  3  4  5  6  7')
+                  for i, linha in enumerate(Fileiras):
+                        print(chr(65 + i), " ".join(linha))
+                  Questão1=int(input('Insira a coluna: '))
+                  Questão2=str(input('Insira a fileira: ')).upper()
+                  if Questão1 not in range(1,8):
+                        print("\nColuna inválida! Repita o palpite.\n")
+                        continue
+                  if Questão2 not in "ABCDEFG":
+                        print("n\Linha inválida! Repita o palpite.\n")
+                        continue
+                  Fileiras=Marcação(Questão1,Questão2,Fileiras)
                   if PosiçãoDoJogador(Questão1, Questão2):
                         break
-            Contador=Contador+1
+                  Contador=Contador+1
 
 
 #Título e apresentação:
