@@ -1,9 +1,8 @@
 import random
-from random import sample
 import string
 
 #Números
-def Números ():
+def PosiçãoDeBombas():
     #Colunas
     Colunas=[]
     while len(Colunas)!=5:
@@ -14,7 +13,7 @@ def Números ():
     Fileiras=[]
     Contador=0
     while len(Fileiras)!=5:
-        Resultado=random.randrange(1,7)
+        Resultado=random.randint(0,6)
         Alfabeto=str(string.ascii_uppercase[Resultado])
         Contador=Contador+1
         if Resultado not in Fileiras:
@@ -26,70 +25,180 @@ def Números ():
         Posições.append(str(Colunas[I])+Letra)
     return Posições
 
-#Bombas
-Bombas=Números()
-print(Bombas)
-
 #Posição de jogadores:
-def PosiçãoDoJogador (Questão1,Questão2):
+def PosiçãoDoJogador (Questão1,Questão2,Fileiras,Bombas):
       Posição_do_Jogador=str(Questão1)+Questão2
       if Posição_do_Jogador in Bombas:
             print()
-            print('Casa com bomba. Você perdeu!')
+            Linha=ord(Questão2)-ord('A')
+            Coluna=Questão1-1
+            Fileiras[Linha][Coluna]='✸'
+            for I in range(7):
+                  print(string.ascii_uppercase[I], Fileiras[I])
+            print()
+            print('--------------Casa com bomba. Você perdeu!--------------')
             print()
             return True
-      else:
+      elif Posição_do_Jogador not in Bombas:
             print()
             print('Casa sem bomba. Continue!')
             print()
             return False
-          
 
-def Marcação(Questão1, Questão2, Fileiras):
+def Marcação(Questão1, Questão2, Fileiras,Bombas):
     Posição_do_Jogador = str(Questão1) + Questão2
-
     if Posição_do_Jogador not in Bombas:
-        Linha = string.ascii_uppercase.index(Questão2)
-        Coluna = Questão1 - 1
-        Fileiras[Linha][Coluna] = "✓"
+      Linha=ord(Questão2)-ord('A')
+      Coluna=Questão1
+      Contador=0
+      NúmerosBombas=0
+      if Coluna<6:
+            ProximidadeDireita=str((Coluna)+1)+string.ascii_uppercase[Linha]
+            if ProximidadeDireita in Bombas:
+                  Contador=Contador+1
+      if Coluna!=0:
+            ProximidadeEsquerda=str((Coluna)-1)+string.ascii_uppercase[Linha]
+            if ProximidadeEsquerda in Bombas:
+                  Contador=Contador+1
+      if Linha>0:
+            ProximidadeAcima=str(Coluna)+(string.ascii_uppercase[Linha-1])
+            if ProximidadeAcima in Bombas:
+                  Contador=Contador+1
+      if Linha<6:
+            ProximidadeAbaixo=str(Coluna)+(string.ascii_uppercase[Linha+1])
+            if ProximidadeAbaixo in Bombas:
+               Contador=Contador+1
+      if Coluna<6 and Linha<6:
+            ProximidadeDiagonalDAb=str((Coluna)+1)+(string.ascii_uppercase[Linha+1])
+            if ProximidadeDiagonalDAb in Bombas:
+                  Contador=Contador+1
+      if Coluna<6 and Linha>0:
+            ProximidadeDiagonalDAc=str((Coluna)-1)+(string.ascii_uppercase[Linha-1])
+            if ProximidadeDiagonalDAc in Bombas:
+                  Contador=Contador+1
+      if Coluna!=0 and Linha<6:
+            ProximidadeDiagonalEAb=str(Coluna-1)+string.ascii_uppercase[Linha+1]
+            if ProximidadeDiagonalEAb in Bombas:
+                  Contador=Contador+1
+      if Coluna!=0 and Linha>0:
+            ProximidadeDiagonalEAc=str((Coluna)-1)+(string.ascii_uppercase[Linha-1])
+            if ProximidadeDiagonalEAc in Bombas:
+                  Contador=Contador+1
+      Fileiras[Linha][Coluna-1]=f'{Contador}'
 
     return Fileiras
-           
 
+def BombasMultiplayer():
+      ListaMultiplayer = []
+      ContadorMultiplayer = 0
+      while ContadorMultiplayer<5:
+            PalpitesMultiplayerINT=input("Insira a coluna (entre 1 e 7): ")
+            PalpitesMultiplayerSTR=input("Insira a fileira (entre A a G): ").upper()
+            PalpitesMultiplayer=str(PalpitesMultiplayerINT)+PalpitesMultiplayerSTR
+            if len(PalpitesMultiplayer) != 2:
+                  print("\n \nInsira conforme o modelo 5C.\n ")
+                  continue
+            if not PalpitesMultiplayer[0].isdigit():
+                  print("\n \nA coluna deve ser um número.\n ")
+                  continue
+            if int(PalpitesMultiplayer[0]) not in range(1, 8):
+                  print("\n \nNúmero inválido.\n ")
+                  continue
+            if PalpitesMultiplayer[1] not in "ABCDEFG":
+                  print("\n \nLetra inválida.\n ")
+                  continue
+            if PalpitesMultiplayer in ListaMultiplayer:
+                  print("\n \nCoordenada já cadastrada!\n ")
+                  continue
+            ListaMultiplayer.append(PalpitesMultiplayer)
+            ContadorMultiplayer=ContadorMultiplayer+1
+            print()
+            print(ListaMultiplayer)
+      return ListaMultiplayer
+   
 #Organização de tabuleiros:
 def Tabuleiro(Resposta):
       print()
-      if Resposta==1:
-            Fileiras = [[" |" for Elemento in range(7)] for Elemento in range(7)]
+      Contador=0
+      if Resposta=='EXIT':
+           print('Saindo...')
+      elif Resposta=='1':
+            PalpitesRealizados=[]
+            #Bombas
             Contador=0
+            Bombas=PosiçãoDeBombas()
+            Fileiras =[['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•']]
             while Contador<44:
-                  print ('   1  2  3  4  5  6  7')
-                  for i, linha in enumerate(Fileiras):
-                        print(chr(65 + i), " ".join(linha))
+                  print(f'Jogadas restantes: {44-Contador}')
+                  print ('    1    2    3    4    5    6    7')
+                  for i in range(7):
+                        print(string.ascii_uppercase[i], Fileiras[i])
                   Questão1=int(input('Insira a coluna: '))
                   Questão2=str(input('Insira a fileira: ')).upper()
                   if Questão1 not in range(1,8):
                         print("\nColuna inválida! Repita o palpite.\n")
                         continue
                   if Questão2 not in "ABCDEFG":
-                        print("n\Linha inválida! Repita o palpite.\n")
+                        print("\nLinha inválida! Repita o palpite.\n")
                         continue
-                  Fileiras=Marcação(Questão1,Questão2,Fileiras)
-                  if PosiçãoDoJogador(Questão1, Questão2):
+                  if len(Questão2)!=1:
+                        print('A fileira deve ter um único valor em string!')
+                        print()
+                        continue
+                  if PosiçãoDoJogador(Questão1, Questão2,Fileiras,Bombas):
                         break
-                  Contador=Contador+1
-
+                  Palpite=str(Questão1)+Questão2
+                  if Palpite in PalpitesRealizados:
+                        print('Palpite já realizado. Por favor, dê uma nova coordenada.\n')
+                        continue
+                  if Palpite not in PalpitesRealizados:
+                        PalpitesRealizados.append(Palpite)
+                        Fileiras=Marcação(Questão1,Questão2,Fileiras,Bombas)
+                        Contador=Contador+1
+                  if Contador==44:
+                        print()
+                        print('--------------Parabéns! Você venceu!--------------')
+                        print()
+      elif Resposta=='2': 
+           PalpitesRealizados=[]
+           Contador=0
+           #Bombas
+           Bombas=BombasMultiplayer()
+           Fileiras =[['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•'],['•','•','•','•','•','•','•']]
+           while Contador<44:
+                 print(f'Jogadas restantes: {44-Contador}')
+                 print ('    1    2    3    4    5    6    7')
+                 for i in range(7):
+                     print(string.ascii_uppercase[i], Fileiras[i])
+                 Questão1=int(input('Insira a coluna: '))
+                 Questão2=str(input('Insira a fileira: ')).upper()
+                 if Questão1 not in range(1,8):
+                        print("\nColuna inválida! Repita o palpite.\n")
+                        continue
+                 if Questão2 not in "ABCDEFG":
+                        print("\n \nLinha inválida! Repita o palpite.\n")
+                        continue
+                 if PosiçãoDoJogador(Questão1, Questão2,Fileiras,Bombas):
+                        break
+                 Palpite=str(Questão1)+Questão2
+                 if Palpite in PalpitesRealizados:
+                        print('Palpite já realizado. Por favor, dê uma nova coordenada.\n')
+                        continue
+                 if Palpite not in PalpitesRealizados:
+                        PalpitesRealizados.append(Palpite)
+                        Fileiras=Marcação(Questão1,Questão2,Fileiras,Bombas)
+                        Contador=Contador+1
+                 if Contador==44:
+                        print('--------------Parabéns! Você venceu!--------------\n ')
 
 #Título e apresentação:
 print('2º Trimestre - Campo Minado\
       Docente: Alisson Zanetti - Programação I\
       Discente: Lauren Manica Conceição\
       Turma: 1F')
-#Criação da tabela (construção com base de sintaxes):
+#Menu:
 print()
 print('Bem vindo ao Campo Minado!\nPara sair do jogo (parar o programa), escreva: "EXIT"!')
-print("Modos de jogo:\n 1) Fácil (Individual)\n 2) Médio (Individual)\n 3) Fácil (Multiplayer)\n 4) Médio (Multplayer)")
-print()
-Resposta=int(input(f'Selecione uma opção (em números): '))
+print("Modos de jogo:\n 1)Individual\n 2)Multiplayer")
+Resposta=(input(f'Selecione uma opção: '))
 Tabuleiro(Resposta)
-print()
