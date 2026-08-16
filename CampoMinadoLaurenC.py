@@ -32,10 +32,10 @@ def BombasMultiplayer2():
     ContadorMultiplayer=0
     while ContadorMultiplayer<15:
         print(f"Palpites restantes: {15-ContadorMultiplayer}")
-        PalpitesMultiplayerINT = input("Insira a coluna (entre 1 e 7): ")
-        PalpitesMultiplayerSTR = input("Insira a fileira (entre A a G): ").upper()
-        PalpitesMultiplayer = str(PalpitesMultiplayerINT) + PalpitesMultiplayerSTR
-        if len(PalpitesMultiplayer) != 2:
+        PalpitesMultiplayerINT=input("Insira a coluna (entre 1 e 7): ")
+        PalpitesMultiplayerSTR=input("Insira a fileira (entre A a G): ").upper()
+        PalpitesMultiplayer=str(PalpitesMultiplayerINT)+PalpitesMultiplayerSTR
+        if len(PalpitesMultiplayer)!=2:
             print("\n \nInsira conforme o modelo 5C.\n ")
             continue
         if not PalpitesMultiplayer[0].isdigit():
@@ -63,9 +63,9 @@ def BombasMultiplayer1():
     ContadorMultiplayer=0
     while ContadorMultiplayer<10:
         print(f"Palpites restantes: {10-ContadorMultiplayer}")
-        PalpitesMultiplayerINT = input("Insira a coluna (entre 1 e 7): ")
-        PalpitesMultiplayerSTR = input("Insira a fileira (entre A a G): ").upper()
-        PalpitesMultiplayer = str(PalpitesMultiplayerINT) + PalpitesMultiplayerSTR
+        PalpitesMultiplayerINT=input("Insira a coluna (entre 1 e 7): ")
+        PalpitesMultiplayerSTR=input("Insira a fileira (entre A a G): ").upper()
+        PalpitesMultiplayer=str(PalpitesMultiplayerINT)+PalpitesMultiplayerSTR
         if len(PalpitesMultiplayer) != 2:
             print("\n \nInsira conforme o modelo 5C.\n ")
             continue
@@ -179,7 +179,7 @@ def Jogar(PosiçãoDeBombas):
         if Questão2 not in "ABCDEFG":
             print("\n--------------Linha inválida! Repita o palpite.--------------\n")
             continue
-        if len(Questão1)!=1:
+        if len(str(Questão1))!=1:
             print("--------------A fileira deve ter um único valor em string!--------------")
             print()
             continue
@@ -233,6 +233,6 @@ print('Para sair do jogo (parar o programa), escreva: "EXIT"!')
 print()
 print("Modos de jogo:\n 1)Individual\n 2)Multiplayer")
 print()
-Resposta = input(f"Selecione uma opção: ")
+Resposta=input(f"Selecione uma opção: ")
 os.system("clear")
 Tabuleiro(Resposta)
