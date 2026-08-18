@@ -165,8 +165,9 @@ def Jogar(PosiçãoDeBombas):
         ["•", "•", "•", "•", "•", "•", "•"],
         ["•", "•", "•", "•", "•", "•", "•"],
     ]
-    while Contador < 44:
-        print(f"Jogadas restantes: {44-Contador}")
+    JogadasNecessárias=49-len(Bombas)     
+    while Contador<JogadasNecessárias:
+        print(f"Jogadas restantes: {JogadasNecessárias-Contador}")
         print()
         print("    1    2    3    4    5    6    7")
         for Números in range(7):
@@ -193,7 +194,7 @@ def Jogar(PosiçãoDeBombas):
             PalpitesRealizados.append(Palpite)
             Fileiras=Marcação(Questão1, Questão2, Fileiras, Bombas)
             Contador=Contador + 1
-        if Contador==44:
+        if Contador==JogadasNecessárias:
             print()
             print("=================== Parabéns! Você venceu!===================")
             print()
